@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <title>Itinerary generator</title>
+<body>
+    <h1>Trip Planner</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Get Trip Plan</button>
+    </form>
+
+    {% if trip_plans %}
+        <h2>Trip Plan for {{ trip_plans.0.destination }}</h2>
+        <ul>
+            {% for trip_plan in trip_plans %}
+                <li>Day {{ trip_plan.day }}: {{ trip_plan.plan }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+{% endblock %}

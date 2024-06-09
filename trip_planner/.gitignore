@@ -1,0 +1,32 @@
+# env
+.env
+
+# environment
+venv/
+ENV/
+env/
+.venv/
+
+# macOS
+.DS_Store
+
+# database
+*.sqlite3
+
+# Django
+*.log
+*.pot
+*.pyc
+*.so
+*.pyo
+*.pyd
+*.db
+
+# migrations
+*/migrations/__pycache__/
+*/migrations/*.py[cod]
+*/migrations/*.pyc
+
+# Docker
+*.dockerfile
+docker-compose.yml
