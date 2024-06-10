@@ -3,20 +3,33 @@
 {% block content %}
     <title>Itinerary generator</title>
 <body>
-    <h1>Trip Planner</h1>
-    <form method="post">
+    <h1>Itinerary Generator</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="{% url 'itinerary_generator' %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Get Trip Plan</button>
+        <button type="submit">Generate Itinerary</button>
     </form>
-
-    {% if trip_plans %}
-        <h2>Trip Plan for {{ trip_plans.0.destination }}</h2>
+    {% if itineraries %}
+        <h2>{{ destination }}</h2>
         <ul>
-            {% for trip_plan in trip_plans %}
-                <li>Day {{ trip_plan.day }}: {{ trip_plan.plan }}</li>
+            {% for day_plan in itineraries %}
+                <li>Day {{ day_plan.day }}:
+                    <ul>
+                        {% for activity in day_plan.activities %}
+                            <li>{{ activity.time }} - {{ activity.description }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
             {% endfor %}
         </ul>
+        <form method="post" action="{% url 'saved_itineraries' %}">
+            {% csrf_token %}
+            <input type="hidden" name="save" value="save">
+            <button type="submit">Save Itinerary</button>
+        </form>
     {% endif %}
 </body>
 {% endblock %}
