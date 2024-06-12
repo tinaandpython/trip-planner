@@ -5,15 +5,9 @@
     <body>
         <h1>Saved Itineraries</h1>
         {% if itineraries %}
-            <ul>
                 {% for itinerary in itineraries %}
-                    <li>
-                        <strong>Destination:</strong> {{ itinerary.destination }} <br>
-                        <strong>Day:</strong> {{ itinerary.day }} <br>
-                        <strong>Plan:</strong> {{ itinerary.plan }}
-                    </li>
+                        <strong> {{ itinerary.destination }} </strong> <br>
                 {% endfor %}
-            </ul>
         {% else %}
             <p>No saved itineraries.</p>
         {% endif %}

@@ -33,14 +33,12 @@
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <form action="{% url 'logout' %}" method="post">
- {% comment %} This "btn btn-link nav-link" mimics the original styling from Bootstrap, otherwise it's displayed as an ugly button {% endcomment %}
                         <button type="submit" class="btn btn-link nav-link">Logout</button>
-                    {% csrf_token %}
+                        {% csrf_token %}
                     </form>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'itinerary_generator' %}">Itinerary generator</a>
-                </li>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'saved_itineraries' %}">My itineraries</a>
@@ -50,10 +48,25 @@
         </div>
     </nav>
 
+    <!-- Message block -->
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-12">
-                {% block content %}{% endblock %}
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
@@ -56,21 +56,34 @@ def itinerary_generator(request):
                 itineraries = request.session['itineraries']
                 destination = request.session['destination']
 
-                # Save new data
-                for i, day in enumerate(itineraries):
-                    ItineraryGenerator.objects.create(
-                        user=request.user,
-                        destination=destination,
-                        day=day['day'],
-                        plan=day['activities']
-                    )
+                # test
+                # print("Session itineraries:", itineraries)
+                # print("Session destination:", destination)
+
+                api_response = {
+                    'itineraries': itineraries,
+                    'destination': destination
+                }
+
+                # Saving new data
+                ItineraryGenerator.objects.create(
+                    user=request.user,
+                    destination=destination,
+                    api_response=api_response
+                )
 
                 # Clear session data
                 del request.session['itineraries']
                 del request.session['destination']
 
+                # success message if the itinerary has been saved (django built-in messages)
+                messages.success(request, 'Your itinerary has been saved!')
+
                 return redirect('itinerary_generator')
             else:
+                #print("Session data missing") --> test
+                # failure message if session capture fails
+                messages.error(request, 'Session data is missing. Please try again.')
                 return redirect('itinerary_generator')
         else:
             form = ItineraryGeneratorForm(request.POST)
@@ -89,13 +102,18 @@ def itinerary_generator(request):
                 response = requests.get(url, headers=headers, params=querystring)
                 if response.status_code == 200:
                     data = response.json()
+                    #print("API response data:", data)
+                else:
+                    #print("Failed API request:", response.status_code, response.text)
+                    data = {'plan': []}  # Handling failed response case
 
-                # Stores the generated itineraries in a session, so I could use them for additional functionality
+                # Stores the generated itineraries in a session
                 request.session['itineraries'] = data['plan']
                 request.session['destination'] = destination
 
                 return render(request, 'itinerary_generator.html', {'itineraries': data['plan'], 'form': form, 'destination': destination})
             else:
+                print("Form is invalid")
                 return render(request, 'itinerary_generator.html', {'form': form, 'error': 'Failed to retrieve data from the API.'})
     else:
         form = ItineraryGeneratorForm()
@@ -107,3 +125,25 @@ def itinerary_generator(request):
 def saved_itineraries(request):
     itineraries = ItineraryGenerator.objects.filter(user=request.user)
     return render(request, 'saved_itineraries.html', {'itineraries': itineraries})
+
+# @login_required
+# def itinerary_detailed(request, itinerary_id):
+#     itinerary = get_object_or_404(ItineraryGenerator, pk=itinerary_id)
+#
+#     if request.user == itinerary.user:
+#         for day
+
+
+@login_required
+def delete_itinerary(request, itinerary_id):
+    itinerary = get_object_or_404(ItineraryGenerator, pk=itinerary_id)
+
+    # Check if the user has the itinerary
+    if request.user == itinerary.user:
+        itinerary.delete()
+        messages.success(request, 'Your itinerary has been deleted!')
+    else:
+        messages.error(request, 'The itinerary cannot be deleted.')
+        pass
+
+    return redirect('saved_itineraries')

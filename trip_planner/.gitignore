@@ -30,3 +30,5 @@ env/
 # Docker
 *.dockerfile
 docker-compose.yml
+
+requirements.txt

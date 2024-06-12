@@ -4,10 +4,7 @@
     <title>Itinerary generator</title>
 <body>
     <h1>Itinerary Generator</h1>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-    <form method="post" action="{% url 'itinerary_generator' %}">
+    <form method="POST" action="{% url 'itinerary_generator' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Generate Itinerary</button>
@@ -25,7 +22,7 @@
                 </li>
             {% endfor %}
         </ul>
-        <form method="post" action="{% url 'saved_itineraries' %}">
+        <form method="POST" action="{% url 'itinerary_generator' %}">
             {% csrf_token %}
             <input type="hidden" name="save" value="save">
             <button type="submit">Save Itinerary</button>
