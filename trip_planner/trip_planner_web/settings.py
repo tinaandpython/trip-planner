@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-%0u3t7ogafw_k13%e^yqyamr2a1bl=#st3jte-9)i$)9=nou63
 
 DEBUG = True
 
-ALLOWED_HOSTS = [] # FOR DEBUG = False ---> 'localhost', '127.0.0.1'
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # FOR DEBUG = False ---> 'localhost', '127.0.0.1'
 
 
 # Application definition
@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,8 +136,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom settings
 
 LOGIN_REDIRECT_URL = '/'
-
 LOGOUT_REDIRECT_URL = '/'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # LOGGING
 

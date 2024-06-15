@@ -1,14 +1,14 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-        <title>My Itineraries</title>
-    <body>
-        <h1>Saved Itineraries</h1>
-        {% if itineraries %}
-                {% for itinerary in itineraries %}
-                        <strong> {{ itinerary.destination }} </strong> <br>
-                {% endfor %}
-        {% else %}
-            <p>No saved itineraries.</p>
-        {% endif %}
+    <div class="container">
+        <h2>Saved Itineraries</h2>
+        <ul>
+            {% for itinerary in itineraries %}
+                <li>
+                    <a href="{% url 'itinerary_detail' itinerary.id %}">Let's go to {{ itinerary.destination }} for {{ itinerary.days }} days</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

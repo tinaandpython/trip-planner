@@ -1,5 +1,21 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-
+    <div class="container">
+        <h2>Itinerary for {{ itinerary.destination }}</h2>
+        <p><strong>Days:</strong> {{ itinerary.days }}</p>
+        <div>
+            {% for day in itinerary.api_response.itineraries %}
+                <h4>Day {{ day.day }}</h4>
+                <ul>
+                    {% for activity in day.activities %}
+                        <li>{{ activity.time }} - {{ activity.description }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+        <form action="{% url 'confirm_itinerary_deletion' itinerary.id %}" method="get">
+            <button type="submit" class="btn btn-danger">Delete Itinerary</button>
+        </form>
+    </div>
 {% endblock %}

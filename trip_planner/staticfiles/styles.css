@@ -1,6 +1,53 @@
 body {
-    background-color: white;
+    background-color: rgb(107, 138, 122);
+}
+
+.itinerary-detail {
+    margin: 20px 0;
+}
+
+.itinerary-detail h4 {
+    margin-top: 10px;
+}
+
+/* BUTTONS AND OTHER SMALL DETAILS */
+
+.btn btn-danger {
+    color: red;
 }
 
 /* ERROR MESSAGES */
 
+.messages {
+    list-style-type: none; /* Removes bullet points */
+    padding: 10px;
+    margin: 0;
+}
+
+.messages .success {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.messages .error {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.messages .warning {
+    background-color: yellow;
+    color: black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.messages .info {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+}

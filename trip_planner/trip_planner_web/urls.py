@@ -33,11 +33,15 @@ urlpatterns = [
     path('', include('itinerary_generator.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
 
 
 if settings.DEBUG is False:
     from django.contrib.staticfiles.views import serve
     urlpatterns += [
         path('static/<path:path>', serve, {'insecure': True}),
-    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ]
+
+# adding those to the existing URL patterns to serve static and media files
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) ---> added for later functionality, does nothing now

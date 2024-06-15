@@ -6,7 +6,7 @@ from django.contrib import messages
 from .forms import ItineraryGeneratorForm
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from .models import ItineraryGenerator
 import requests
 
@@ -55,6 +55,7 @@ def itinerary_generator(request):
             if 'itineraries' in request.session and 'destination' in request.session:
                 itineraries = request.session['itineraries']
                 destination = request.session['destination']
+                days = request.session['days']
 
                 # test
                 # print("Session itineraries:", itineraries)
@@ -69,12 +70,14 @@ def itinerary_generator(request):
                 ItineraryGenerator.objects.create(
                     user=request.user,
                     destination=destination,
+                    days=days,
                     api_response=api_response
                 )
 
                 # Clear session data
                 del request.session['itineraries']
                 del request.session['destination']
+                del request.session['days']
 
                 # success message if the itinerary has been saved (django built-in messages)
                 messages.success(request, 'Your itinerary has been saved!')
@@ -110,6 +113,7 @@ def itinerary_generator(request):
                 # Stores the generated itineraries in a session
                 request.session['itineraries'] = data['plan']
                 request.session['destination'] = destination
+                request.session['days'] = days
 
                 return render(request, 'itinerary_generator.html', {'itineraries': data['plan'], 'form': form, 'destination': destination})
             else:
@@ -126,24 +130,39 @@ def saved_itineraries(request):
     itineraries = ItineraryGenerator.objects.filter(user=request.user)
     return render(request, 'saved_itineraries.html', {'itineraries': itineraries})
 
-# @login_required
-# def itinerary_detailed(request, itinerary_id):
-#     itinerary = get_object_or_404(ItineraryGenerator, pk=itinerary_id)
-#
-#     if request.user == itinerary.user:
-#         for day
+@login_required
+def itinerary_detail(request, itinerary_id):
+    itinerary = get_object_or_404(ItineraryGenerator, pk=itinerary_id)
+
+    if request.user == itinerary.user:
+        return render(request, 'itinerary_detail.html', {'itinerary': itinerary})
+    else:
+        messages.error(request, "Nice try, go fix your code!.")
+        return redirect('saved_itineraries')
+
 
 
 @login_required
 def delete_itinerary(request, itinerary_id):
     itinerary = get_object_or_404(ItineraryGenerator, pk=itinerary_id)
 
-    # Check if the user has the itinerary
-    if request.user == itinerary.user:
-        itinerary.delete()
-        messages.success(request, 'Your itinerary has been deleted!')
-    else:
-        messages.error(request, 'The itinerary cannot be deleted.')
-        pass
+    if request.method == 'POST':
+    # Checks if the user has the itinerary
+        if request.user == itinerary.user:
+            itinerary.delete()
+            messages.success(request, 'Your itinerary has been deleted!')
+        else:
+            messages.error(request, 'The itinerary cannot be deleted.')
+            pass
 
-    return redirect('saved_itineraries')
+        return redirect('saved_itineraries')
+
+    # Rendering a confirmation page if GET request
+    return redirect('confirm_itinerary_deletion', itinerary_id=itinerary_id)
+
+
+@login_required
+def confirm_itinerary_deletion(request, itinerary_id):
+    itinerary = get_object_or_404(ItineraryGenerator, pk=itinerary_id)
+
+    return render(request, 'confirm_itinerary_deletion.html', {'itinerary': itinerary})
