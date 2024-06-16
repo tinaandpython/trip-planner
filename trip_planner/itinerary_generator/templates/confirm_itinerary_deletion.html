@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <title>Delete Itinerary</title>
+    <div class="confirm-deletion">
         <h2>Delete Itinerary</h2>
         <p>Are you sure you want to delete the itinerary for {{ itinerary.destination }}?</p>
         <form action="{% url 'delete_itinerary' itinerary.id %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Confirm Delete</button>
-            <a href="{% url 'itinerary_detail' itinerary.id %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-danger"><i class="ai-trash-can"></i> Confirm Delete</button>
+            <a href="{% url 'itinerary_detail' itinerary.id %}" class="btn btn-secondary"><i class="ai-arrow-back-thick"></i> Cancel</a>
         </form>
     </div>
 {% endblock %}

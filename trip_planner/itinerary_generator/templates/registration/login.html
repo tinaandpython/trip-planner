@@ -1,35 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="login-container">
   {% if form.errors %}
     <p>Log in error, please try again</p>
   {% endif %}
-
-{% comment %}
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Neturite prieigos prie šios informacijos. Turite prisijungti.</p>
-    {% endif %}
-  {% endif %}
-{% endcomment %}
 
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <table>
       <tr>
-        <td>Username: </td>
+        <td><label for="id_username">Username:</label></td>
         <td>{{ form.username }}</td>
       </tr>
       <tr>
-        <td>Password: </td>
+        <td><label for="id_password">Password:</label></td>
         <td>{{ form.password }}</td>
       </tr>
     </table>
     <input type="submit" value="Log in" />
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
-
-  {% comment %} <p><a href="{% url 'password_reset' %}">Forgot password?</a></p> {% endcomment %}
-
+</div>
 {% endblock %}

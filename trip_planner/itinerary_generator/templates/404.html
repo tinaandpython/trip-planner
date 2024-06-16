@@ -2,11 +2,13 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-        <h1>404 - Page Not Found</h1>
-        <img src="{% static 'images/chandler_for_404.png' %}" alt="Chandler for 404" width="500" height="300">
-        <p> I'm not great with directions.</p>
-        <p>Can I interest you in a sarcastic comment?</p>
-        <button><a href="{% url 'home' %}">Return to Home</a></button>
+    <div class="error404-page">
+        <h1><i class="ai-face-sad"></i> 404 - Page Not Found</h1>
+        <img src="{% static 'images/chandler_for_404.png' %}" alt="Chandler for 404" width="500" height="300" >
+        <div class="error404-comment">
+            <p> I'm not great with directions.</p>
+            <p>Can I interest you in a sarcastic comment?</p>
+        </div>
+        <button class="return-home"><a href="{% url 'home' %}"><i class="ai-home-alt1"></i> Return to Home</a></button>
     </div>
 {% endblock %}

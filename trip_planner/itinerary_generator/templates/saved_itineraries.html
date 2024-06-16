@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
+    <div class="saved-itineraries">
         <h2>Saved Itineraries</h2>
-        <ul>
-            {% for itinerary in itineraries %}
-                <li>
-                    <a href="{% url 'itinerary_detail' itinerary.id %}">Let's go to {{ itinerary.destination }} for {{ itinerary.days }} days</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="row">
+            <div class="col-12 content-container">
+                <ul class="list-unstyled">
+                    {% for itinerary in itineraries %}
+                        <li>
+                            <a href="{% url 'itinerary_detail' itinerary.id %}" class="trip-card-link">
+                                <div class="trip-card">
+                                    <p>{{ itinerary.destination }} for {{ itinerary.days }} days</p>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 {% endblock %}

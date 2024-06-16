@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
+    <div class="itinerary-detail">
         <h2>Itinerary for {{ itinerary.destination }}</h2>
-        <p><strong>Days:</strong> {{ itinerary.days }}</p>
-        <div>
+        <div class="activities">
             {% for day in itinerary.api_response.itineraries %}
                 <h4>Day {{ day.day }}</h4>
                 <ul>
@@ -15,7 +14,7 @@
             {% endfor %}
         </div>
         <form action="{% url 'confirm_itinerary_deletion' itinerary.id %}" method="get">
-            <button type="submit" class="btn btn-danger">Delete Itinerary</button>
+            <button type="submit" class="btn btn-danger"><i class="ai-trash-can"></i> Delete Itinerary</button>
         </form>
     </div>
 {% endblock %}
