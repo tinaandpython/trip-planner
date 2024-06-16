@@ -56,6 +56,33 @@ a {
     margin-top: 10px
 }
 
+.navbar-nav .nav-item form .btn-link {
+    color: #ffffff;
+    padding: 0;
+    border: none;
+    background: none;
+    display: left;
+}
+
+.navbar-nav .nav-item form .btn-link:hover,
+.navbar-nav .nav-item form .btn-link:focus,
+.navbar-nav .nav-item form .btn-link:active {
+    color: #3d9970;
+    text-decoration: none;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+/* aligns items left when toggled */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
 /* FOOTER */
 .footer {
     padding: 5px 0;

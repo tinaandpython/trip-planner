@@ -51,7 +51,11 @@ def test_404(request):
 @login_required
 def itinerary_generator(request):
     if request.method == 'POST':
+        # Checks if the 'save' button was pressed
         if 'save' in request.POST:
+            # session aka browsing session (cookies). When data is stored in request.session,
+            # it is saved on the server side and associated with a session ID.
+            # The session ID is sent to the client as a cookie.
             if 'itineraries' in request.session and 'destination' in request.session:
                 itineraries = request.session['itineraries']
                 destination = request.session['destination']
@@ -74,7 +78,7 @@ def itinerary_generator(request):
                     api_response=api_response
                 )
 
-                # Clear session data
+                # Clear session data after it's saved on the db
                 del request.session['itineraries']
                 del request.session['destination']
                 del request.session['days']
@@ -89,6 +93,7 @@ def itinerary_generator(request):
                 messages.error(request, 'Session data is missing. Please try again.')
                 return redirect('itinerary_generator')
         else:
+            # Handles form submission ItineraryGenerator
             form = ItineraryGeneratorForm(request.POST)
             if form.is_valid():
                 destination = form.cleaned_data['destination']
@@ -108,7 +113,7 @@ def itinerary_generator(request):
                     #print("API response data:", data)
                 else:
                     #print("Failed API request:", response.status_code, response.text)
-                    data = {'plan': []}  # Handling failed response case
+                    data = {'plan': []}  # Handles failed response case, places an empty list
 
                 # Stores the generated itineraries in a session
                 request.session['itineraries'] = data['plan']
@@ -120,6 +125,7 @@ def itinerary_generator(request):
                 print("Form is invalid")
                 return render(request, 'itinerary_generator.html', {'form': form, 'error': 'Failed to retrieve data from the API.'})
     else:
+        # In case of a GET req for some reason
         form = ItineraryGeneratorForm()
 
     return render(request, 'itinerary_generator.html', {'form': form})
