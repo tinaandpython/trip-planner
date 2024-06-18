@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
+from django.core.exceptions import ValidationError
 from django.contrib import messages
 from .forms import ItineraryGeneratorForm
 from django.conf import settings
@@ -9,12 +10,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from .models import ItineraryGenerator
 import requests
+import re
 
 
 
 def home(request):
     return render(request, 'home.html')
 
+def validate_password(password):
+    if len(password) < 8:
+        raise ValidationError("Password must be at least 8 characters long.")
+    if not re.search(r"[A-Za-z]", password):
+        raise ValidationError("Password must contain at least one letter.")
+    if not re.search(r"[0-9]", password):
+        raise ValidationError("Password must contain at least one number.")
 
 @csrf_protect
 def register(request):
@@ -23,7 +32,14 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password']
         password2 = request.POST['password2']
+
         if password == password2:
+            try:
+                validate_password(password)
+            except ValidationError as e:
+                messages.error(request, ' '.join(e.messages))
+                return redirect('register')
+
             if User.objects.filter(username=username).exists():
                 messages.error(request, f'The username: {username} is already in use!')
                 return redirect('register')
@@ -125,7 +141,7 @@ def itinerary_generator(request):
                 print("Form is invalid")
                 return render(request, 'itinerary_generator.html', {'form': form, 'error': 'Failed to retrieve data from the API.'})
     else:
-        # In case of a GET req for some reason
+        # If GET req
         form = ItineraryGeneratorForm()
 
     return render(request, 'itinerary_generator.html', {'form': form})

@@ -28,7 +28,7 @@ env/
 */migrations/*.pyc
 
 # Docker
-*.dockerfile
+Dockerfile
 docker-compose.yml
 
 requirements.txt

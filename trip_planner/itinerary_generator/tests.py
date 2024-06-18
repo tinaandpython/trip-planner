@@ -1,15 +1,16 @@
 # from django.test import TestCase
 import unittest
 import requests
+from django.conf import settings
 
 # Create your tests here.
 class TestTripPlannerAPI(unittest.TestCase):
     def test_trip_planner_api_consistency(self):
         url = "https://ai-trip-planner.p.rapidapi.com/"
-        querystring = {"days": "3", "destination": "London,UK"}
+        querystring = {"days": "2", "destination": "Paris"}
         headers = {
-            "x-rapidapi-key": "24e20b276fmsh643987da00e8e7cp14e343jsn974ef20c4f6f",
-            "x-rapidapi-host": "ai-trip-planner.p.rapidapi.com"
+                "x-rapidapi-key": settings.RAPIDAPI_KEY,
+                "x-rapidapi-host": settings.RAPIDAPI_HOST,
         }
 
         # Makes multiple requests to the API
